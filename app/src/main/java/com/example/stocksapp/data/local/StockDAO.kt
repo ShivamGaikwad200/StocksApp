@@ -35,4 +35,10 @@ interface StockDAO {
 
     @Query("DELETE FROM recent_searches WHERE timestamp < :expiryTime")
     suspend fun deleteExpiredRecentSearches(expiryTime: Long)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertStockChartData(data: CachedStockChartData)
+
+    @Query("SELECT * FROM cached_stock_chart WHERE symbol = :symbol AND last_updated > :expiryTime")
+    suspend fun getValidStockChartData(symbol: String, expiryTime: Long): CachedStockChartData?
 }

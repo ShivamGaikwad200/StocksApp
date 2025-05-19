@@ -86,27 +86,27 @@ fun StockTrackerApp() {
 }
 
 sealed class Screen(val route: String) {
-    object Explore : Screen("explore")
+    data object Explore : Screen("explore")
 
-    object Product : Screen("product/{${STOCK_SYMBOL}}") {
+    data object Product : Screen("product/{symbol}") {
         const val STOCK_SYMBOL = "symbol"
         fun createRoute(symbol: String) = "product/$symbol"
     }
 
-    object ViewAll : Screen("view_all/{${SECTION}}") {
+    data object ViewAll : Screen("view_all/{section}") {
         const val SECTION = "section"
         fun createRoute(section: String) = "view_all/$section"
     }
 
     companion object {
-        val Product.routeWithArgs: String get() = route
+        val Product.routeWithArgs: String get() = Product.route
         val Product.arguments: List<NamedNavArgument> get() = listOf(
-            navArgument(STOCK_SYMBOL) { type = NavType.StringType }
+            navArgument(Product.STOCK_SYMBOL) { type = NavType.StringType }
         )
 
-        val ViewAll.routeWithArgs: String get() = route
+        val ViewAll.routeWithArgs: String get() = ViewAll.route
         val ViewAll.arguments: List<NamedNavArgument> get() = listOf(
-            navArgument(SECTION) { type = NavType.StringType }
+            navArgument(ViewAll.SECTION) { type = NavType.StringType }
         )
     }
 }

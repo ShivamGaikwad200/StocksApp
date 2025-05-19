@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CompanyRepository {
     fun getCompanyOverview(symbol: String): Flow<Result<CompanyOverview>>
-    suspend fun getStockChartData(symbol: String): Result<List<StockChartData>>
+    suspend fun getStockChartData(symbol: String): Result<StockChartData>
 }

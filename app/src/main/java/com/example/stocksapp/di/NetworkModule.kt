@@ -8,14 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val NetworkModule = module {
 
-    private const val API_KEY = "BKGQ12CWDXK5MI2N"
-    private const val BASE_URL = "https://www.alphavantage.co/"
+    val apikey = "BKGQ12CWDXK5MI2N"
+    val baseurl = "https://www.alphavantage.co/"
 
     single<Interceptor> {
         Interceptor { chain ->
             val original = chain.request()
             val url = original.url.newBuilder()
-                .addQueryParameter("apikey", API_KEY)
+                .addQueryParameter("apikey", apikey)
                 .build()
             val request = original.newBuilder().url(url).build()
             chain.proceed(request)
@@ -24,7 +24,7 @@ val NetworkModule = module {
 
     single {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseurl)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -3,6 +3,7 @@ package com.example.stocksapp.presentation.product
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stocksapp.data.remote.CompanyOverview
+import com.example.stocksapp.data.remote.StockChartData
 import com.example.stocksapp.domain.repository.CompanyRepository
 import com.example.stocksapp.presentation.common.BaseModel
 import kotlinx.coroutines.flow.Flow
@@ -29,12 +30,12 @@ class ProductViewModel(
 
             try {
                 val companyInfo = companyRepository.getCompanyOverview(symbol)
-                //val chartData = companyRepository.getStockChartData(symbol)
+                val chartData = companyRepository.getStockChartData(symbol)
 
                 _uiState.value = BaseModel.Success(
                     ProductUiState(
                         companyInfo = companyInfo,
-                        //chartData = chartData.getOrThrow()
+                        chartData = chartData.getOrThrow()
                     )
                 )
             } catch (e: Exception) {
@@ -50,5 +51,5 @@ class ProductViewModel(
 
 data class ProductUiState(
     val companyInfo: Flow<Result<CompanyOverview>>,
-    //val chartData: List<StockChartData>
+    val chartData: StockChartData
 )
