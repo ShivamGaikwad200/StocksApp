@@ -10,7 +10,7 @@ An Android application developed in **Kotlin** that allows users to explore and 
 - **Jetpack Compose** – Modern UI toolkit  
 - **Material 3** – UI theming and components  
 - **Retrofit** – For API calls  
-- **Koin** – Dependency Injection (recommended)  
+- **Koin** – Dependency Injection   
 - **Coroutines & Flow** – Asynchronous programming  
 - **MPAndroidChart** – For line chart rendering  
 - **Room** – For caching and persistence  
