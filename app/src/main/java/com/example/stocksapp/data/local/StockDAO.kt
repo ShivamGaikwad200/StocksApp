@@ -28,7 +28,7 @@ interface StockDAO {
     suspend fun insertRecentSearch(search: RecentSearch)
 
     @Query("SELECT * FROM recent_searches ORDER BY timestamp DESC LIMIT :limit")
-    suspend fun getRecentSearches(limit: Int = 5): Flow<List<RecentSearch>>
+    fun getRecentSearches(limit: Int = 5): Flow<List<RecentSearch>>
 
     @Query("DELETE FROM recent_searches WHERE query = :query")
     suspend fun deleteRecentSearch(query: String)

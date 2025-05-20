@@ -123,7 +123,7 @@ class SearchViewModel(
 
 data class SearchUiState(
     val searchResults: List<SymbolMatch>,
-    val recentSearches: Flow<List<String>>, // Changed from Flow<List<String>> to List<String>
+    val recentSearches: Flow<List<String>>,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

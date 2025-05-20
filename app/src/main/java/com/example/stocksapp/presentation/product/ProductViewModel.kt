@@ -6,7 +6,6 @@ import com.example.stocksapp.data.remote.CompanyOverview
 import com.example.stocksapp.data.remote.StockChartData
 import com.example.stocksapp.domain.repository.CompanyRepository
 import com.example.stocksapp.presentation.common.BaseModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +19,9 @@ class ProductViewModel(
     private val _uiState = MutableStateFlow<BaseModel<ProductUiState>>(BaseModel.Loading)
     val uiState: StateFlow<BaseModel<ProductUiState>> = _uiState.asStateFlow()
 
+    private val _companyInfoState = MutableStateFlow<BaseModel<CompanyOverview>>(BaseModel.Loading)
+    val companyInfoState: StateFlow<BaseModel<CompanyOverview>> = _companyInfoState.asStateFlow()
+
     init {
         loadData()
     }
@@ -27,15 +29,22 @@ class ProductViewModel(
     private fun loadData() {
         viewModelScope.launch {
             _uiState.value = BaseModel.Loading
+            _companyInfoState.value = BaseModel.Loading
 
             try {
-                val companyInfo = companyRepository.getCompanyOverview(symbol)
-                val chartData = companyRepository.getStockChartData(symbol)
+
+                val chartData = companyRepository.getStockChartData(symbol).getOrThrow()
+
+                companyRepository.getCompanyOverview(symbol).collect { result ->
+                    _companyInfoState.value = result.fold(
+                        onSuccess = { data -> BaseModel.Success(data) },
+                        onFailure = { e -> BaseModel.Error(e.message ?: "Company info load failed") }
+                    )
+                }
 
                 _uiState.value = BaseModel.Success(
                     ProductUiState(
-                        companyInfo = companyInfo,
-                        chartData = chartData.getOrThrow()
+                        chartData = chartData
                     )
                 )
             } catch (e: Exception) {
@@ -50,6 +59,5 @@ class ProductViewModel(
 }
 
 data class ProductUiState(
-    val companyInfo: Flow<Result<CompanyOverview>>,
     val chartData: StockChartData
 )

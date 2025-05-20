@@ -19,7 +19,7 @@ val AppModule = module {
 
     single {
         OkHttpClient.Builder()
-            .addInterceptor(get<Interceptor>()) // API key interceptor from NetworkModule
+            .addInterceptor(get<Interceptor>())
             .addInterceptor(HttpLoggingInterceptor().apply {
                 HttpLoggingInterceptor.Level.BODY
             })

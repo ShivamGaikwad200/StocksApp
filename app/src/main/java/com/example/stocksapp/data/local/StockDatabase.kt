@@ -4,18 +4,32 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.stocksapp.data.local.converter.CompanyOverviewConverter
+import com.example.stocksapp.data.local.converter.StockChartDataConverter
+import com.example.stocksapp.data.local.converter.TopGainerLoserConverter
+import com.example.stocksapp.data.local.converters.TickerSearchConverter
 import com.example.stocksapp.data.local.entities.*
 
 @Database(
     entities = [
         CachedTopGainersLosers::class,
         CachedCompanyOverview::class,
-        CachedTickerSearch::class
+        CachedTickerSearch::class,
+        CachedStockChartData::class,
+        RecentSearch::class
     ],
     version = 1
 )
+@TypeConverters(
+    TopGainerLoserConverter::class,
+    CompanyOverviewConverter::class,
+    TickerSearchConverter::class,
+    StockChartDataConverter::class
+    )
+
 abstract class StockDatabase : RoomDatabase() {
     abstract fun stockDao(): StockDAO
 

@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StocksAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -63,7 +62,7 @@ fun StockTrackerApp() {
             route = Screen.Product.routeWithArgs,
             arguments = Screen.Product.arguments
         ) { navBackStackEntry ->
-            val symbol = navBackStackEntry.arguments?.getString(Screen.Product.STOCK_SYMBOL) ?: ""
+            val symbol = navBackStackEntry.arguments?.getString(STOCK_SYMBOL) ?: ""
             ProductScreen(
                 symbol = symbol,
                 onBack = { navController.popBackStack() }
@@ -73,7 +72,7 @@ fun StockTrackerApp() {
             route = Screen.ViewAll.routeWithArgs,
             arguments = Screen.ViewAll.arguments
         ) { navBackStackEntry ->
-            val section = navBackStackEntry.arguments?.getString(Screen.ViewAll.SECTION) ?: ""
+            val section = navBackStackEntry.arguments?.getString(SECTION) ?: ""
             ViewAllScreen(
                 section = section,
                 onStockSelected = { symbol ->
