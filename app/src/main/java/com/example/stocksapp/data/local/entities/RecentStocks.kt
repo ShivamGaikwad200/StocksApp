@@ -2,12 +2,10 @@ package com.example.stocksapp.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Query
-import java.util.*
 
-@Entity(tableName = "recent_searches")
-data class RecentSearch(
+@Entity(tableName = "recent_stocks")
+data class RecentStocks(
     @PrimaryKey
-    val query: String,
+    val symbol: String,
     val timestamp: Long = System.currentTimeMillis()
 )

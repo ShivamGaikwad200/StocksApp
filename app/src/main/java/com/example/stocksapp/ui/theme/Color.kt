@@ -2,6 +2,9 @@ package com.example.stocksapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val darkColor = Color(0xFF1D1D1D)
+val nearBlack = Color(0xFF111111)
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)

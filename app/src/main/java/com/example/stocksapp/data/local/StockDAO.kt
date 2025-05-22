@@ -25,15 +25,15 @@ interface StockDAO {
     suspend fun getValidSearchResults(query: String, expiryTime: Long): CachedTickerSearch?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecentSearch(search: RecentSearch)
+    suspend fun insertRecentSearch(search: com.example.stocksapp.data.local.entities.RecentSearch)
 
-    @Query("SELECT * FROM recent_searches ORDER BY timestamp DESC LIMIT :limit")
-    fun getRecentSearches(limit: Int = 5): Flow<List<RecentSearch>>
+    @Query("SELECT * FROM recent_stocks ORDER BY timestamp DESC LIMIT :limit")
+    fun getRecentSearches(limit: Int = 5): Flow<List<RecentStocks>>
 
-    @Query("DELETE FROM recent_searches WHERE query = :query")
-    suspend fun deleteRecentSearch(query: String)
+    @Query("DELETE FROM recent_stocks WHERE symbol = :symbol")
+    suspend fun deleteRecentSearch(symbol: String)
 
-    @Query("DELETE FROM recent_searches WHERE timestamp < :expiryTime")
+    @Query("DELETE FROM recent_stocks WHERE timestamp < :expiryTime")
     suspend fun deleteExpiredRecentSearches(expiryTime: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -20,6 +20,7 @@ import com.example.stocksapp.Screen.Companion.routeWithArg
 import com.example.stocksapp.Screen.Companion.routeWithArgs
 import com.example.stocksapp.presentation.explore.ExploreScreen
 import com.example.stocksapp.presentation.product.ProductScreen
+import com.example.stocksapp.presentation.search.SearchScreen
 import com.example.stocksapp.ui.theme.StocksAppTheme
 import com.example.stocksapp.presentation.viewall.ViewAllScreen
 
@@ -54,6 +55,9 @@ fun StockTrackerApp() {
                 },
                 onViewAll = { section ->
                     navController.navigate(Screen.ViewAll.createRoute(section))
+                },
+                onSearchClicked = {
+                    navController.navigate(Screen.Search.route)
                 }
             )
         }
@@ -70,12 +74,21 @@ fun StockTrackerApp() {
         }
 
         composable(
-            route = routeWithArg,
-            arguments = argument
+            route = Screen.ViewAll.routeWithArg,
+            arguments = Screen.ViewAll.argument
         ) { backStackEntry ->
-            val section = backStackEntry.arguments?.getString("section") ?: ""
+            val section = backStackEntry.arguments?.getString(Screen.ViewAll.SECTION) ?: ""
             ViewAllScreen(
                 section = section,
+                onStockSelected = { symbol ->
+                    navController.navigate(Screen.Product.createRoute(symbol))
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = Screen.Search.route) {
+            SearchScreen(
                 onStockSelected = { symbol ->
                     navController.navigate(Screen.Product.createRoute(symbol))
                 },
@@ -98,14 +111,16 @@ sealed class Screen(val route: String) {
         fun createRoute(section: String) = "view_all/$section"
     }
 
+    data object Search : Screen("search")
+
     companion object {
         val routeWithArgs: String get() = Product.route
         val arguments: List<NamedNavArgument> get() = listOf(
             navArgument(Product.STOCK_SYMBOL) { type = NavType.StringType }
         )
 
-        val routeWithArg: String get() = ViewAll.route
-        val argument: List<NamedNavArgument> get() = listOf(
+        val ViewAll.routeWithArg: String get() = ViewAll.route
+        val ViewAll.argument: List<NamedNavArgument> get() = listOf(
             navArgument(ViewAll.SECTION) { type = NavType.StringType }
         )
     }

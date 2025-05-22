@@ -14,7 +14,7 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
     private companion object {
-        const val CACHE_EXPIRY_MS = 6 * 60 * 60 * 1000 // 6 hours for search results
+        const val CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000 // 24 hours for search results
     }
 
     override fun searchTickers(query: String): Flow<Result<SearchTicker>> = flow {

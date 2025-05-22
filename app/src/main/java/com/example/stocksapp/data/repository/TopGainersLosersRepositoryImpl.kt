@@ -14,7 +14,7 @@ class TopGainersLosersRepositoryImpl (
 ) : TopGainersLosersRepository {
 
     private companion object {
-        const val CACHE_EXPIRY_MS = 60 * 60 * 1000 // 1 hour
+        const val CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000 // 24 hour
     }
 
     override fun getTopGainersLosers(): Flow<Result<TopGainerLoser>> = flow {

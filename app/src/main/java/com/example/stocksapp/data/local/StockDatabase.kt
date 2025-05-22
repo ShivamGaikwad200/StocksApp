@@ -19,9 +19,10 @@ import com.example.stocksapp.data.local.entities.*
         CachedCompanyOverview::class,
         CachedTickerSearch::class,
         CachedStockChartData::class,
-        RecentSearch::class
+        RecentSearch::class,
+        RecentStocks::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(
     TopGainerLoserConverter::class,
@@ -58,6 +59,13 @@ abstract class StockDatabase : RoomDatabase() {
                         `query` TEXT NOT NULL, 
                         `timestamp` INTEGER NOT NULL, 
                         PRIMARY KEY(`query`)
+                    )
+                """)
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS `recent_stocks` (
+                        `symbol` TEXT NOT NULL, 
+                        `timestamp` INTEGER NOT NULL, 
+                        PRIMARY KEY(`symbol`)
                     )
                 """)
             }

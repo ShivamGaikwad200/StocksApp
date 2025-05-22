@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -27,6 +30,9 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
+    private val _recentSearches = MutableStateFlow<List<String>>(emptyList())
+    val recentSearches: StateFlow<List<String>> = _recentSearches.asStateFlow()
+
     init {
         loadRecentSearches()
         setupSearchDebounce()
@@ -36,14 +42,17 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.value = BaseModel.Loading
             try {
-                val recentSearches = recentSearchesRepository.getRecentSearches()
-                _uiState.value = BaseModel.Success(
-                    SearchUiState(
-                        searchResults = emptyList(),
-                        recentSearches = recentSearches,
-                        isLoading = false
-                    )
-                )
+                recentSearchesRepository.getRecentSearches()
+                    .collectLatest { searches ->
+                        _recentSearches.value = searches
+                        _uiState.value = BaseModel.Success(
+                            SearchUiState(
+                                searchResults = emptyList(),
+                                recentSearches = flow { emit(searches) },
+                                isLoading = false
+                            )
+                        )
+                    }
             } catch (e: Exception) {
                 _uiState.value = BaseModel.Error(e.message ?: "Failed to load recent searches")
             }
@@ -53,9 +62,19 @@ class SearchViewModel(
     private fun setupSearchDebounce() {
         _searchQuery
             .debounce(300)
+            .distinctUntilChanged()
             .onEach { query ->
                 if (query.isNotEmpty()) {
                     performSearch(query)
+                } else {
+                    // When query is empty, show recent searches
+                    _uiState.value = BaseModel.Success(
+                        SearchUiState(
+                            searchResults = emptyList(),
+                            recentSearches = flow { emit(_recentSearches.value) },
+                            isLoading = false
+                        )
+                    )
                 }
             }
             .launchIn(viewModelScope)
@@ -65,7 +84,7 @@ class SearchViewModel(
         _searchQuery.value = query
     }
 
-    private fun performSearch(query: String) {
+    fun performSearch(query: String) {
         viewModelScope.launch {
             _uiState.update { currentState ->
                 when (currentState) {
@@ -83,22 +102,20 @@ class SearchViewModel(
                 searchRepository.searchTickers(query).collect { result ->
                     result.fold(
                         onSuccess = { searchTicker ->
-                            val recentSearches = recentSearchesRepository.getRecentSearches()
+                            recentSearchesRepository.addRecentSearch(query)
                             _uiState.value = BaseModel.Success(
                                 SearchUiState(
                                     searchResults = searchTicker.matches(),
-                                    recentSearches = recentSearches,
+                                    recentSearches = flow { emit(_recentSearches.value) },
                                     isLoading = false
                                 )
                             )
-                            recentSearchesRepository.addRecentSearch(query)
                         },
                         onFailure = { error ->
-                            val recentSearches = recentSearchesRepository.getRecentSearches()
                             _uiState.value = BaseModel.Success(
                                 SearchUiState(
                                     searchResults = emptyList(),
-                                    recentSearches = recentSearches,
+                                    recentSearches = flow { emit(_recentSearches.value) },
                                     isLoading = false,
                                     errorMessage = error.message ?: "Search failed"
                                 )
@@ -107,11 +124,10 @@ class SearchViewModel(
                     )
                 }
             } catch (e: Exception) {
-                val recentSearches = recentSearchesRepository.getRecentSearches()
                 _uiState.value = BaseModel.Success(
                     SearchUiState(
                         searchResults = emptyList(),
-                        recentSearches = recentSearches,
+                        recentSearches = flow { emit(_recentSearches.value) },
                         isLoading = false,
                         errorMessage = e.message ?: "Search failed"
                     )

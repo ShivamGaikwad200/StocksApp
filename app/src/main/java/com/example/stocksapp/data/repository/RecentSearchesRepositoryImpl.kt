@@ -18,7 +18,7 @@ class RecentSearchesRepositoryImpl(
     override suspend fun getRecentSearches(): Flow<List<String>> {
         return stockDao.getRecentSearches(MAX_RECENT_SEARCHES)
             .map { searches -> searches.map {
-                it.query
+                it.symbol
             } }
     }
 

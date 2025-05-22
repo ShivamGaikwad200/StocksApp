@@ -52,37 +52,37 @@ data class CompanyOverview(
     val ebitda: String,
 
     @SerializedName("PERatio")
-    val peRatio: Double? = null,
+    val peRatio: String,
 
     @SerializedName("PEGRatio")
-    val pegRatio: Double? = null,
+    val pegRatio: String,
 
     @SerializedName("BookValue")
-    val bookValue: Double? = null,
+    val bookValue: String,
 
     @SerializedName("DividendPerShare")
-    val dividendPerShare: Double? = null,
+    val dividendPerShare: String,
 
     @SerializedName("DividendYield")
-    val dividendYield: Double? = null,
+    val dividendYield: String,
 
     @SerializedName("EPS")
-    val eps: Double? = null,
+    val eps: String,
 
     @SerializedName("RevenuePerShareTTM")
-    val revenuePerShareTTM: Double? = null,
+    val revenuePerShareTTM: String,
 
     @SerializedName("ProfitMargin")
-    val profitMargin: Double? = null,
+    val profitMargin: String,
 
     @SerializedName("OperatingMarginTTM")
-    val operatingMarginTTM: Double? = null,
+    val operatingMarginTTM: String,
 
     @SerializedName("ReturnOnAssetsTTM")
-    val returnOnAssetsTTM: Double? = null,
+    val returnOnAssetsTTM: String,
 
     @SerializedName("ReturnOnEquityTTM")
-    val returnOnEquityTTM: Double? = null,
+    val returnOnEquityTTM: String,
 
     @SerializedName("RevenueTTM")
     val revenueTTM: String,
@@ -91,64 +91,64 @@ data class CompanyOverview(
     val grossProfitTTM: String,
 
     @SerializedName("DilutedEPSTTM")
-    val dilutedEpsTTM: Double? = null,
+    val dilutedEpsTTM: String,
 
     @SerializedName("QuarterlyEarningsGrowthYOY")
-    val quarterlyEarningsGrowthYOY: Double? = null,
+    val quarterlyEarningsGrowthYOY: String,
 
     @SerializedName("QuarterlyRevenueGrowthYOY")
-    val quarterlyRevenueGrowthYOY: Double? = null,
+    val quarterlyRevenueGrowthYOY: String,
 
     @SerializedName("AnalystTargetPrice")
-    val analystTargetPrice: Double? = null,
+    val analystTargetPrice: String,
 
     @SerializedName("AnalystRatingStrongBuy")
-    val analystRatingStrongBuy: Int? = null,
+    val analystRatingStrongBuy: String,
 
     @SerializedName("AnalystRatingBuy")
-    val analystRatingBuy: Int? = null,
+    val analystRatingBuy: String,
 
     @SerializedName("AnalystRatingHold")
-    val analystRatingHold: Int? = null,
+    val analystRatingHold: String,
 
     @SerializedName("AnalystRatingSell")
-    val analystRatingSell: Int? = null,
+    val analystRatingSell: String,
 
     @SerializedName("AnalystRatingStrongSell")
-    val analystRatingStrongSell: Int? = null,
+    val analystRatingStrongSell: String,
 
     @SerializedName("TrailingPE")
-    val trailingPE: Double? = null,
+    val trailingPE: String,
 
     @SerializedName("ForwardPE")
-    val forwardPE: Double? = null,
+    val forwardPE: String,
 
     @SerializedName("PriceToSalesRatioTTM")
-    val priceToSalesRatioTTM: Double? = null,
+    val priceToSalesRatioTTM: String,
 
     @SerializedName("PriceToBookRatio")
-    val priceToBookRatio: Double? = null,
+    val priceToBookRatio: String,
 
     @SerializedName("EVToRevenue")
-    val evToRevenue: Double? = null,
+    val evToRevenue: String,
 
     @SerializedName("EVToEBITDA")
-    val evToEbitda: Double? = null,
+    val evToEbitda: String,
 
     @SerializedName("Beta")
-    val beta: Double? = null,
+    val beta: String,
 
     @SerializedName("52WeekHigh")
-    val week52High: Double? = null,
+    val week52High: String,
 
     @SerializedName("52WeekLow")
-    val week52Low: Double? = null,
+    val week52Low: String,
 
     @SerializedName("50DayMovingAverage")
-    val day50MovingAvg: Double? = null,
+    val day50MovingAvg: String,
 
     @SerializedName("200DayMovingAverage")
-    val day200MovingAvg: Double? = null,
+    val day200MovingAvg: String,
 
     @SerializedName("SharesOutstanding")
     val sharesOutstanding: String,

@@ -6,8 +6,8 @@ data class SearchTicker(
     @SerializedName("bestMatches")
     val bestMatches: List<SymbolMatch>
 ) {
-    fun matches(): List<SymbolMatch> {
-        TODO("Not yet implemented")
+    fun matches(): List<SymbolMatch> = bestMatches.sortedByDescending {
+        it.matchScore.toFloatOrNull() ?: 0f
     }
 }
 
