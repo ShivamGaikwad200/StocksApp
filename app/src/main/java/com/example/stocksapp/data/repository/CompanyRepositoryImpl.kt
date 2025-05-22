@@ -1,5 +1,8 @@
 package com.example.stocksapp.data.repository
 
+import androidx.annotation.OptIn
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import com.example.stocksapp.data.local.StockDAO
 import com.example.stocksapp.data.local.entities.CachedCompanyOverview
 import com.example.stocksapp.data.local.entities.CachedStockChartData
@@ -19,16 +22,17 @@ class CompanyRepositoryImpl(
         const val TIME = 24 * 60 * 60 * 1000
     }
 
-    override fun getCompanyOverview(symbol: String): Flow<Result<CompanyOverview>> = flow {
+    @OptIn(UnstableApi::class) override fun getCompanyOverview(symbol: String): Flow<Result<CompanyOverview>> = flow {
         val expiryTime = System.currentTimeMillis() - TIME
 
         try {
-            val freshData = stockApi.getCompanyOverview(symbol)
+            val freshData = stockApi.getCompanyOverview(symbol=symbol)
             stockDao.insertCompanyOverview(
                 CachedCompanyOverview(symbol = symbol, data = freshData)
             )
             emit(Result.success(freshData))
         } catch (e: Exception) {
+            Log.e("CompanyRepository", "Error fetching company overview for $symbol", e)
             stockDao.getValidCompanyOverview(symbol, expiryTime)?.let {
                 emit(Result.success(it.data))
             } ?: emit(Result.failure(e))
@@ -40,7 +44,7 @@ class CompanyRepositoryImpl(
 
         return try {
             // Try network first
-            val response = stockApi.getStockChartData(symbol)
+            val response = stockApi.getStockChartData(symbol=symbol)
             stockDao.insertStockChartData(
                 CachedStockChartData(
                     symbol = symbol,

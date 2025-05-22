@@ -14,15 +14,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.stocksapp.Screen.Companion.argument
 import com.example.stocksapp.Screen.Companion.arguments
+import com.example.stocksapp.Screen.Companion.routeWithArg
 import com.example.stocksapp.Screen.Companion.routeWithArgs
-import com.example.stocksapp.Screen.Product.STOCK_SYMBOL
-import com.example.stocksapp.Screen.ViewAll.SECTION
 import com.example.stocksapp.presentation.explore.ExploreScreen
 import com.example.stocksapp.presentation.product.ProductScreen
 import com.example.stocksapp.ui.theme.StocksAppTheme
 import com.example.stocksapp.presentation.viewall.ViewAllScreen
-import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +47,7 @@ fun StockTrackerApp() {
         navController = navController,
         startDestination = Screen.Explore.route
     ) {
-        composable(route = Screen.Explore.route) {
+        composable(Screen.Explore.route) {
             ExploreScreen(
                 onStockSelected = { symbol ->
                     navController.navigate(Screen.Product.createRoute(symbol))
@@ -58,21 +57,23 @@ fun StockTrackerApp() {
                 }
             )
         }
+
         composable(
-            route = Screen.Product.routeWithArgs,
-            arguments = Screen.Product.arguments
-        ) { navBackStackEntry ->
-            val symbol = navBackStackEntry.arguments?.getString(STOCK_SYMBOL) ?: ""
+            route = routeWithArgs,
+            arguments = arguments
+        ) { backStackEntry ->
+            val symbol = backStackEntry.arguments?.getString("symbol") ?: ""
             ProductScreen(
                 symbol = symbol,
                 onBack = { navController.popBackStack() }
             )
         }
+
         composable(
-            route = Screen.ViewAll.routeWithArgs,
-            arguments = Screen.ViewAll.arguments
-        ) { navBackStackEntry ->
-            val section = navBackStackEntry.arguments?.getString(SECTION) ?: ""
+            route = routeWithArg,
+            arguments = argument
+        ) { backStackEntry ->
+            val section = backStackEntry.arguments?.getString("section") ?: ""
             ViewAllScreen(
                 section = section,
                 onStockSelected = { symbol ->
@@ -98,13 +99,13 @@ sealed class Screen(val route: String) {
     }
 
     companion object {
-        val Product.routeWithArgs: String get() = Product.route
-        val Product.arguments: List<NamedNavArgument> get() = listOf(
+        val routeWithArgs: String get() = Product.route
+        val arguments: List<NamedNavArgument> get() = listOf(
             navArgument(Product.STOCK_SYMBOL) { type = NavType.StringType }
         )
 
-        val ViewAll.routeWithArgs: String get() = ViewAll.route
-        val ViewAll.arguments: List<NamedNavArgument> get() = listOf(
+        val routeWithArg: String get() = ViewAll.route
+        val argument: List<NamedNavArgument> get() = listOf(
             navArgument(ViewAll.SECTION) { type = NavType.StringType }
         )
     }

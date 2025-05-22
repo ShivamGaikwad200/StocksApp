@@ -15,20 +15,20 @@ import org.koin.dsl.module
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "stock_preferences")
 
 val AppModule = module {
-    single<Context> { androidContext() }
+    //single<Context> { androidContext() }
 
     single {
         OkHttpClient.Builder()
             .addInterceptor(get<Interceptor>())
             .addInterceptor(HttpLoggingInterceptor().apply {
-                HttpLoggingInterceptor.Level.BODY
+                level=HttpLoggingInterceptor.Level.BODY
             })
             .build()
     }
 
     single {
         Room.databaseBuilder(
-            get(),
+            androidContext(),
             StockDatabase::class.java,
             "stocks.db"
         ).build()

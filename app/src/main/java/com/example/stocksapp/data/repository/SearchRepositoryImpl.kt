@@ -21,7 +21,7 @@ class SearchRepositoryImpl(
         val expiryTime = System.currentTimeMillis() - CACHE_EXPIRY_MS
 
         try {
-            val freshData = stockApi.searchTickers(query)
+            val freshData = stockApi.searchTickers(query=query)
             stockDao.insertSearchResults(
                 CachedTickerSearch(query = query, data = freshData)
             )
